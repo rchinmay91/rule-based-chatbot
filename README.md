@@ -17,8 +17,8 @@ A simple, rule-based conversational chatbot built entirely using **Python** and 
 
 1. **Clone the repository:**
    ```bash
-   git clone <your-github-repo-url>
-   cd <your-repo-folder-name>
+   git clone https://github.com/rchinmay91/rule-based-chatbot.git
+   cd rule-based-chatbot
    ```
 
 2. **Install NLTK:**
