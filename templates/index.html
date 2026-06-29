@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Local Web Chatbot</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f4f7f6; margin: 0; padding: 20px; display: flex; justify-content: center; }
+        .chat-container { width: 450px; background: white; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); display: flex; flex-direction: column; height: 500px; }
+        .chat-header { background: #007bff; color: white; padding: 15px; text-align: center; border-radius: 8px 8px 0 0; font-weight: bold; }
+        .chat-box { flex: 1; padding: 15px; overflow-y: auto; border-bottom: 1px solid #ddd; }
+        .message { margin: 10px 0; padding: 10px; border-radius: 5px; max-width: 80%; word-wrap: break-word; }
+        .user { background: #e1ffd4; margin-left: auto; text-align: right; }
+        .bot { background: #f1f0f0; margin-right: auto; }
+        .input-area { display: flex; padding: 10px; }
+        .input-area input { flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 4px; outline: none; }
+        .input-area button { background: #007bff; color: white; border: none; padding: 10px 15px; margin-left: 5px; border-radius: 4px; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+<div class="chat-container">
+    <div class="chat-header">Local Server NLP Chatbot</div>
+    <div class="chat-box" id="chatBox">
+        <div class="message bot">Hello! I am running live on your local server. Ask me anything!</div>
+    </div>
+    <div class="input-area">
+        <input type="text" id="userInput" placeholder="Type your message here..." onkeypress="handleKeyPress(event)">
+        <button onclick="sendMessage()">Send</button>
+    </div>
+</div>
+
+<script>
+    function sendMessage() {
+        const inputField = document.getElementById("userInput");
+        const messageText = inputField.value.trim();
+        if (!messageText) return;
+
+        appendMessage(messageText, "user");
+        inputField.value = "";
+
+        fetch("/get_response", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ message: messageText })
+        })
+        .then(response => response.json())
+        .then(data => {
+            appendMessage(data.response, "bot");
+        })
+        .catch(error => {
+            console.error("Error:", error);
+            appendMessage("Error communicating with local server.", "bot");
+        });
+    }
+
+    function appendMessage(text, sender) {
+        const chatBox = document.getElementById("chatBox");
+        const msgDiv = document.createElement("div");
+        msgDiv.className = `message ${sender}`;
+        msgDiv.innerText = text;
+        chatBox.appendChild(msgDiv);
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    function handleKeyPress(event) {
+        if (event.key === "Enter") sendMessage();
+    }
+</script>
+
+</body>
+</html>
