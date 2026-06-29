@@ -1,16 +1,17 @@
+import string
 import nltk
 from nltk.tokenize import word_tokenize
 
-print("Downloading NLTK resources...")
+def tokenize_and_clean(text):
+    # Step 1: Tokenize the text
+    tokens = word_tokenize(text)
+    
+    # Step 2: Remove punctuation
+    cleaned_tokens = [token for token in tokens if token not in string.punctuation]
+    return cleaned_tokens
 
-nltk.download("punkt")
-nltk.download("punkt_tab")   # <-- Add this line
-nltk.download("stopwords")
-nltk.download("wordnet")
-
-print("All resources downloaded successfully!")
-
-print(word_tokenize("Hello, welcome to NLP!"))
-
-
-exit()
+if __name__ == "__main__":
+    print("Chatbot Initialized (Punctuation Removal Active)!")
+    user_input = input("You: ")
+    tokens = tokenize_and_clean(user_input)
+    print(f"Cleaned Tokens: {tokens}")
