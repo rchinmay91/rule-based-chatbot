@@ -1,5 +1,16 @@
-print("Welcome to my NLP Chatbot!")
+import nltk
+from nltk.tokenize import word_tokenize
 
-name = input("What's your name? ")
+print("Downloading NLTK resources...")
 
-print(f"Hello {name}! Nice to meet you.")
+nltk.download("punkt")
+nltk.download("punkt_tab")   # <-- Add this line
+nltk.download("stopwords")
+nltk.download("wordnet")
+
+print("All resources downloaded successfully!")
+
+print(word_tokenize("Hello, welcome to NLP!"))
+
+
+exit()
