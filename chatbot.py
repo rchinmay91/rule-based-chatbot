@@ -1,4 +1,5 @@
 import string
+import random
 import nltk
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
@@ -7,19 +8,18 @@ from nltk.stem import WordNetLemmatizer
 LEMMATIZER = WordNetLemmatizer()
 STOP_WORDS = set(stopwords.words('english'))
 
-# Predefined intents, keywords (must be lowercase/lemmatized), and responses
 INTENTS = {
     "greeting": {
         "keywords": ["hello", "hi", "hey", "greet"],
         "responses": ["Hello! How can I help you today?", "Hi there! What can I do for you?"]
     },
     "goodbye": {
-        "keywords": ["bye", "goodbye", "leave", "exit"],
+        "keywords": ["bye", "goodbye", "leave", "exit", "quit"],
         "responses": ["Goodbye! Have a great day!", "See you later!"]
     },
     "help": {
         "keywords": ["help", "info", "support"],
-        "responses": ["I am a local NLP chatbot. I can greet you, say goodbye, or answer basic questions!"]
+        "responses": ["I am a local NLP chatbot. I can greet you, say goodbye, or offer help!"]
     }
 }
 
@@ -31,19 +31,31 @@ def preprocess_text(text):
     return final_tokens
 
 def match_intent(tokens):
-    # Check each token against our intent keywords
     for token in tokens:
         for intent, data in INTENTS.items():
             if token in data["keywords"]:
-                # Return the first matching response found
-                import random
-                return random.choice(data["responses"])
-    
-    return "I'm sorry, I didn't quite understand that. Could you rephrase?"
+                return intent, random.choice(data["responses"])
+    return None, "I'm sorry, I didn't quite understand that. Could you rephrase?"
 
 if __name__ == "__main__":
-    print("Chatbot Initialized (Intent Matching Active)!")
-    user_input = input("You: ")
-    tokens = preprocess_text(user_input)
-    response = match_intent(tokens)
-    print(f"Bot: {response}")
+    print("==============================================")
+    print("   Local NLP Chatbot Active! Type 'exit' to quit.")
+    print("==============================================")
+    
+    while True:
+        user_input = input("You: ")
+        
+        # Immediate local fallback to break the loop safely
+        if user_input.strip().lower() in ['exit', 'quit', 'bye']:
+            print("Bot: Goodbye! Have a great day!")
+            break
+            
+        tokens = preprocess_text(user_input)
+        intent, response = match_intent(tokens)
+        
+        print(f"Bot: {response}")
+        print("-" * 30)
+        
+        # Break the loop if the matched intent was a goodbye
+        if intent == "goodbye":
+            break
