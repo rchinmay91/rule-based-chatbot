@@ -8,6 +8,7 @@ from nltk.stem import WordNetLemmatizer
 LEMMATIZER = WordNetLemmatizer()
 STOP_WORDS = set(stopwords.words('english'))
 
+# Expanded Local Intents Dictionary
 INTENTS = {
     "greeting": {
         "keywords": ["hello", "hi", "hey", "greet"],
@@ -19,7 +20,19 @@ INTENTS = {
     },
     "help": {
         "keywords": ["help", "info", "support"],
-        "responses": ["I am a local NLP chatbot. I can greet you, say goodbye, or offer help!"]
+        "responses": ["I am a local NLP chatbot. I can talk about my creator, the year, or the weather!"]
+    },
+    "creator": {
+        "keywords": ["creator", "built", "made", "developer", "programmer"],
+        "responses": ["I was built by a brilliant developer using local Python and NLTK logic!", "You made me!"]
+    },
+    "year": {
+        "keywords": ["year", "date", "today"],
+        "responses": ["The current calendar year is 2026.", "We are living in the year 2026!"]
+    },
+    "weather": {
+        "keywords": ["weather", "rain", "sun", "sunny", "cloudy"],
+        "responses": ["Since I run entirely locally without external APIs, I can't check live data, but I hope it's sunny outside!", "I don't have internet access to check live forecasts, but stay cozy!"]
     }
 }
 
@@ -39,13 +52,12 @@ def match_intent(tokens):
 
 if __name__ == "__main__":
     print("==============================================")
-    print("   Local NLP Chatbot Active! Type 'exit' to quit.")
+    print("   Improved Chatbot Active! Type 'exit' to quit.")
     print("==============================================")
     
     while True:
         user_input = input("You: ")
         
-        # Immediate local fallback to break the loop safely
         if user_input.strip().lower() in ['exit', 'quit', 'bye']:
             print("Bot: Goodbye! Have a great day!")
             break
@@ -56,6 +68,5 @@ if __name__ == "__main__":
         print(f"Bot: {response}")
         print("-" * 30)
         
-        # Break the loop if the matched intent was a goodbye
         if intent == "goodbye":
             break
